@@ -5,7 +5,6 @@ import com.example.delivery.menu.dto.response.MenuResponseDto;
 import com.example.delivery.menu.entity.Menu;
 import com.example.delivery.menu.repository.MenuRepository;
 import com.example.delivery.user.entity.User;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -37,5 +36,13 @@ public class MenuService {
     public List<MenuResponseDto> getMenus() {
         return menuRepository.findAll().stream().map(MenuResponseDto::new).toList();
 //        return menuRepository.findByDeletedAtIsNull().stream().map(MenuResponseDto::new).toList();
+    }
+
+    public MenuResponseDto getMenu(Long menuId) {
+        Menu menu = menuRepository.findById(menuId)
+//        Menu menu = menuRepository.findByIdAndDeletedAtIsNull(menuId)
+                .orElseThrow(() -> new IllegalArgumentException("메뉴가 없습니다."));
+
+        return new MenuResponseDto(menu);
     }
 }

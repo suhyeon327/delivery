@@ -36,4 +36,10 @@ public class MenuController {
     public List<MenuResponseDto> getMenus() {
         return menuService.getMenus();
     }
+
+    @Transactional(readOnly = true)
+    @GetMapping("/{menuId}")
+    public MenuResponseDto getMenu(@PathVariable Long menuId) {
+        return menuService.getMenu(menuId);
+    }
 }
