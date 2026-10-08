@@ -42,4 +42,15 @@ public class MenuController {
     public MenuResponseDto getMenu(@PathVariable Long menuId) {
         return menuService.getMenu(menuId);
     }
+
+    @Secured(UserRoleEnum.Authority.OWNER)
+    @PutMapping("/{menuId}")
+    public MenuResponseDto updateMenu(
+            @PathVariable Long menuId,
+            @Valid @RequestBody MenuRequestDto requestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+
+    ) {
+        return menuService.updateMenu(menuId, requestDto, userDetails.getUser());
+    }
 }

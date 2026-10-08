@@ -2,8 +2,10 @@ package com.example.delivery.menu.entity;
 
 
 import com.example.delivery.global.entity.BaseEntity;
+import com.example.delivery.menu.dto.request.MenuRequestDto;
 import com.example.delivery.user.entity.User;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,6 +32,12 @@ public class Menu extends BaseEntity {
     private String description;
 
     public Menu(String name, Long price, String description, User user) {
+        this.name = name;
+        this.price = price;
+        this.description = description;
+    }
+
+    public void update(String name, Long price, String description) {
         this.name = name;
         this.price = price;
         this.description = description;

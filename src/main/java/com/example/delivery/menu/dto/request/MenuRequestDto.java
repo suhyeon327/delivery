@@ -1,5 +1,6 @@
 package com.example.delivery.menu.dto.request;
 
+import com.example.delivery.menu.entity.Menu;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

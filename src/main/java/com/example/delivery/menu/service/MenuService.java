@@ -5,6 +5,7 @@ import com.example.delivery.menu.dto.response.MenuResponseDto;
 import com.example.delivery.menu.entity.Menu;
 import com.example.delivery.menu.repository.MenuRepository;
 import com.example.delivery.user.entity.User;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -42,6 +43,24 @@ public class MenuService {
         Menu menu = menuRepository.findById(menuId)
 //        Menu menu = menuRepository.findByIdAndDeletedAtIsNull(menuId)
                 .orElseThrow(() -> new IllegalArgumentException("메뉴가 없습니다."));
+
+        return new MenuResponseDto(menu);
+    }
+
+    public MenuResponseDto updateMenu(Long menuId, @Valid MenuRequestDto requestDto, User user) {
+        String name = requestDto.getName();
+        Long price = requestDto.getPrice();
+        String description = requestDto.getDescription();
+
+        Menu menu = menuRepository.findById(menuId)
+//        Menu menu = menuRepository.findByIdAndDeletedAtIsNull(menuId)
+                .orElseThrow(() -> new IllegalArgumentException("메뉴가 없습니다."));
+
+        if (!menu.getUser().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("본인이 등록한 메뉴가 아닙니다.");
+        }
+
+        menu.update(name, price, description);
 
         return new MenuResponseDto(menu);
     }
