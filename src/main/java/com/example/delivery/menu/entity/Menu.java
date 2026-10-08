@@ -33,6 +33,5 @@ public class Menu extends BaseEntity {
         this.name = name;
         this.price = price;
         this.description = description;
-        this.user = user;
     }
 }

@@ -2,19 +2,21 @@ package com.example.delivery.menu.controller;
 
 import com.example.delivery.global.security.UserDetailsImpl;
 import com.example.delivery.menu.dto.request.MenuRequestDto;
+import com.example.delivery.menu.dto.response.MenuResponseDto;
 import com.example.delivery.menu.service.MenuService;
 import com.example.delivery.user.entity.UserRoleEnum;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
+@Transactional
 @RequestMapping("/api/menu")
 public class MenuController {
 
@@ -27,5 +29,11 @@ public class MenuController {
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         menuService.createMenu(requestDto, userDetails.getUser());
+    }
+
+    @Transactional(readOnly = true)
+    @GetMapping
+    public List<MenuResponseDto> getMenus() {
+        return menuService.getMenus();
     }
 }

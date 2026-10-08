@@ -1,6 +1,7 @@
 package com.example.delivery.menu.service;
 
 import com.example.delivery.menu.dto.request.MenuRequestDto;
+import com.example.delivery.menu.dto.response.MenuResponseDto;
 import com.example.delivery.menu.entity.Menu;
 import com.example.delivery.menu.repository.MenuRepository;
 import com.example.delivery.user.entity.User;
@@ -8,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,5 +32,10 @@ public class MenuService {
         // 메뉴 등록
         Menu menu = new Menu(name, price, description, user);
         menuRepository.save(menu);
+    }
+
+    public List<MenuResponseDto> getMenus() {
+        return menuRepository.findAll().stream().map(MenuResponseDto::new).toList();
+//        return menuRepository.findByDeletedAtIsNull().stream().map(MenuResponseDto::new).toList();
     }
 }
