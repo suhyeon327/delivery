@@ -22,7 +22,7 @@ public class Menu extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Column(nullable = false)
@@ -36,7 +36,8 @@ public class Menu extends BaseEntity {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    public Menu(String name, Long price, String description, User user) {
+    public Menu(User user, String name, Long price, String description) {
+        this.user = user;
         this.name = name;
         this.price = price;
         this.description = description;

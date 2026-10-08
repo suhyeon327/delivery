@@ -30,7 +30,7 @@ public class MenuService {
         }
 
         // 메뉴 등록
-        Menu menu = new Menu(name, price, description, user);
+        Menu menu = new Menu(user, name, price, description);
         menuRepository.save(menu);
     }
 
