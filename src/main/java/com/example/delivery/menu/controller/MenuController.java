@@ -49,8 +49,16 @@ public class MenuController {
             @PathVariable Long menuId,
             @Valid @RequestBody MenuRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails
-
     ) {
         return menuService.updateMenu(menuId, requestDto, userDetails.getUser());
+    }
+
+    @Secured(UserRoleEnum.Authority.OWNER)
+    @DeleteMapping("/{menuId}")
+    public void deleteMenu(
+            @PathVariable Long menuId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        menuService.deleteMenu(menuId, userDetails.getUser());
     }
 }

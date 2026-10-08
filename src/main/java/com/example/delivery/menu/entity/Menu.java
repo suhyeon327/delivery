@@ -9,6 +9,8 @@ import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -31,6 +33,9 @@ public class Menu extends BaseEntity {
 
     private String description;
 
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
     public Menu(String name, Long price, String description, User user) {
         this.name = name;
         this.price = price;
@@ -41,5 +46,9 @@ public class Menu extends BaseEntity {
         this.name = name;
         this.price = price;
         this.description = description;
+    }
+
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
     }
 }

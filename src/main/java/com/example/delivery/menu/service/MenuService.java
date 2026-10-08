@@ -35,13 +35,11 @@ public class MenuService {
     }
 
     public List<MenuResponseDto> getMenus() {
-        return menuRepository.findAll().stream().map(MenuResponseDto::new).toList();
-//        return menuRepository.findByDeletedAtIsNull().stream().map(MenuResponseDto::new).toList();
+        return menuRepository.findByDeletedAtIsNull().stream().map(MenuResponseDto::new).toList();
     }
 
     public MenuResponseDto getMenu(Long menuId) {
-        Menu menu = menuRepository.findById(menuId)
-//        Menu menu = menuRepository.findByIdAndDeletedAtIsNull(menuId)
+        Menu menu = menuRepository.findByIdAndDeletedAtIsNull(menuId)
                 .orElseThrow(() -> new IllegalArgumentException("메뉴가 없습니다."));
 
         return new MenuResponseDto(menu);
@@ -52,8 +50,7 @@ public class MenuService {
         Long price = requestDto.getPrice();
         String description = requestDto.getDescription();
 
-        Menu menu = menuRepository.findById(menuId)
-//        Menu menu = menuRepository.findByIdAndDeletedAtIsNull(menuId)
+        Menu menu = menuRepository.findByIdAndDeletedAtIsNull(menuId)
                 .orElseThrow(() -> new IllegalArgumentException("메뉴가 없습니다."));
 
         if (!menu.getUser().getId().equals(user.getId())) {
@@ -63,5 +60,16 @@ public class MenuService {
         menu.update(name, price, description);
 
         return new MenuResponseDto(menu);
+    }
+
+    public void deleteMenu(Long menuId, User user) {
+        Menu menu = menuRepository.findById(menuId)
+                .orElseThrow(() -> new IllegalArgumentException("메뉴가 존재하지 않습니다."));
+
+        if (!menu.getUser().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("본인이 등록한 메뉴가 이닙니다.");
+        }
+
+        menu.delete();
     }
 }
