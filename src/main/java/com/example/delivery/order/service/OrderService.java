@@ -3,12 +3,14 @@ package com.example.delivery.order.service;
 import com.example.delivery.menu.entity.Menu;
 import com.example.delivery.menu.repository.MenuRepository;
 import com.example.delivery.order.dto.request.OrderRequestDto;
+import com.example.delivery.order.dto.request.OrderStatusResponseDto;
 import com.example.delivery.order.dto.response.OrderResponseDto;
 import com.example.delivery.order.entity.Order;
 import com.example.delivery.order.entity.OrderStatusEnum;
 import com.example.delivery.order.repository.OrderRepository;
 import com.example.delivery.user.entity.User;
 import com.example.delivery.user.entity.UserRoleEnum;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,5 +76,29 @@ public class OrderService {
         }
 
         order.cancel();
+    }
+
+    public void changeOrderStatus(Long orderId, OrderStatusResponseDto responseDto, User user) {
+
+        // 주문이 DB에 있는지 확인
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("주문이 존재하지 않습니다."));
+
+        // 본인 주문이 맞는지 확인
+        if (!order.getMenu().getUser().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("본인의 주문이 아닙니다.");
+        }
+
+        // 상태 가져오기
+        OrderStatusEnum current = order.getStatus();
+        OrderStatusEnum change = responseDto.getStatus();
+
+        // 주문 상태 변경
+        if ((current == OrderStatusEnum.PENDING && change == OrderStatusEnum.ACCEPTED) ||
+                (current == OrderStatusEnum.ACCEPTED && change == OrderStatusEnum.DELIVERED)) {
+            order.changeStatus(change);
+        } else {
+            throw new IllegalArgumentException("변경할 수 없는 주문 상태입니다.");
+        }
     }
 }

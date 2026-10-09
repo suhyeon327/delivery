@@ -50,4 +50,8 @@ public class Order extends BaseEntity {
     public void cancel() {
         this.status = OrderStatusEnum.CANCELLED;
     }
+
+    public void changeStatus(OrderStatusEnum status) {
+        this.status = status;
+    }
 }
