@@ -2,21 +2,19 @@ package com.example.delivery.order.controller;
 
 import com.example.delivery.global.security.UserDetailsImpl;
 import com.example.delivery.order.dto.request.OrderRequestDto;
+import com.example.delivery.order.dto.response.OrderResponseDto;
 import com.example.delivery.order.service.OrderService;
 import com.example.delivery.user.entity.UserRoleEnum;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@Transactional
 @RequestMapping("/api/order")
 public class OrderController {
 
@@ -29,6 +27,12 @@ public class OrderController {
             @AuthenticationPrincipal UserDetailsImpl userDetails
     ) {
         orderService.createOrder(requestDto, userDetails.getUser());
+    }
+
+    @Secured({UserRoleEnum.Authority.OWNER, UserRoleEnum.Authority.CUSTOMER})
+    @GetMapping
+    public List<OrderResponseDto> getOrders(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return orderService.getOrders(userDetails.getUser());
     }
 
 }
