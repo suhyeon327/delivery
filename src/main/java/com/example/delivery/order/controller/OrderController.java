@@ -8,6 +8,7 @@ import com.example.delivery.user.entity.UserRoleEnum;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.authorization.method.AuthorizeReturnObject;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,4 +36,12 @@ public class OrderController {
         return orderService.getOrders(userDetails.getUser());
     }
 
+    @Secured(UserRoleEnum.Authority.CUSTOMER)
+    @DeleteMapping("/{orderId}")
+    public void cancelOrder(
+            @PathVariable Long orderId,
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        orderService.cancelOrder(orderId, userDetails.getUser());
+    }
 }

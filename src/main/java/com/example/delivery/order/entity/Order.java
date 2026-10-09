@@ -46,4 +46,8 @@ public class Order extends BaseEntity {
         this.address = address;
         this.status = status;
     }
+
+    public void cancel() {
+        this.status = OrderStatusEnum.CANCELLED;
+    }
 }

@@ -57,4 +57,22 @@ public class OrderService {
 
         return orders.stream().map(OrderResponseDto::new).toList();
     }
+
+    public void cancelOrder(Long orderId, User user) {
+        // 주문이 DB에 있는지 확인
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("주문이 존재하지 않습니다."));
+
+        // 본인 주문이 맞는지 확인
+        if (!order.getUser().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("본인의 주문이 아닙니다.");
+        }
+
+        // 주문 요청 상태라면 주문 상태 주문 취소 변경 아니면 거절
+        if (order.getStatus() != OrderStatusEnum.PENDING) {
+            throw new IllegalArgumentException("주문 요청 상태가 아닙니다. 주문 취소가 불가능합니다.");
+        }
+
+        order.cancel();
+    }
 }
