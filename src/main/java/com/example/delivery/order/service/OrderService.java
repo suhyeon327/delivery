@@ -94,7 +94,7 @@ public class OrderService {
         OrderStatusEnum change = responseDto.getStatus();
 
         // 주문 상태 변경
-        if ((current == OrderStatusEnum.PENDING && change == OrderStatusEnum.ACCEPTED) ||
+        if ((current == OrderStatusEnum.PAID && change == OrderStatusEnum.ACCEPTED) ||
                 (current == OrderStatusEnum.ACCEPTED && change == OrderStatusEnum.DELIVERED)) {
             order.changeStatus(change);
         } else {

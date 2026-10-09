@@ -2,7 +2,8 @@ package com.example.delivery.order.entity;
 
 public enum OrderStatusEnum {
     PENDING,
+    PAID,
     ACCEPTED,
-    CANCELLED,
-    DELIVERED
+    DELIVERED,
+    CANCELLED
 }
