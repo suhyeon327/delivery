@@ -16,7 +16,6 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@Transactional
 @RequestMapping("/api/menu")
 public class MenuController {
 
@@ -31,13 +30,11 @@ public class MenuController {
         menuService.createMenu(requestDto, userDetails.getUser());
     }
 
-    @Transactional(readOnly = true)
     @GetMapping
     public List<MenuResponseDto> getMenus() {
         return menuService.getMenus();
     }
 
-    @Transactional(readOnly = true)
     @GetMapping("/{menuId}")
     public MenuResponseDto getMenu(@PathVariable Long menuId) {
         return menuService.getMenu(menuId);

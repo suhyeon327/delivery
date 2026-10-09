@@ -8,12 +8,14 @@ import com.example.delivery.user.entity.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MenuService {
 
     private final MenuRepository menuRepository;
@@ -34,10 +36,12 @@ public class MenuService {
         menuRepository.save(menu);
     }
 
+    @Transactional(readOnly = true)
     public List<MenuResponseDto> getMenus() {
         return menuRepository.findByDeletedAtIsNull().stream().map(MenuResponseDto::new).toList();
     }
 
+    @Transactional(readOnly = true)
     public MenuResponseDto getMenu(Long menuId) {
         Menu menu = menuRepository.findByIdAndDeletedAtIsNull(menuId)
                 .orElseThrow(() -> new IllegalArgumentException("메뉴가 없습니다."));
